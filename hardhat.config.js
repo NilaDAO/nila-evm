@@ -5,7 +5,8 @@ require("@openzeppelin/hardhat-upgrades");
 
 // No keys or RPC URLs in this file: they come from the environment (.env, never committed).
 // The FoodToken proxy is owned by a Ledger; upgrades run only with the `polygon-ledger` network.
-const RPC = process.env.POLYGON_RPC_URL || "https://polygon-rpc.com";
+// Set POLYGON_RPC_URL to your own endpoint; there is no working public default.
+const RPC = process.env.POLYGON_RPC_URL || "";
 
 module.exports = {
   solidity: {

@@ -36,5 +36,7 @@ npx hardhat test
 POLYGON_RPC_URL=… LEDGER_ACCOUNT=… npx hardhat run scripts/do_upgrade_foodtoken_p1.ts --network polygon-ledger
 ```
 
-`.openzeppelin/polygon.json` is the upgrades manifest for the deployed proxies (public addresses
-and storage layouts).
+`.openzeppelin/polygon.json` is the OpenZeppelin upgrades manifest as it stands on Polygon. It
+lists every Nila proxy deployed from the earlier repository, including the fund core, viewer, FX
+pool and nIN, whose sources are not here, with their implementation history and storage layouts.
+All of it is public chain data; the upgrade tool needs it to validate the FoodToken upgrade.

@@ -1,5 +1,5 @@
 // Upgrade FoodTokenUpgradeable — P1 (15 Oct 2026): future SOS, field claims per season,
-// sellFromBatch, syncFieldClaims. Appends two mappings; no reinitializer.
+// sellFromBatch, syncFieldClaims. Appends one mapping (fieldBusyUntil); no reinitializer.
 // Order (reviewer 15 Oct): PAUSE → upgrade → read every TokenMinted → syncFieldClaims in
 // chunks → verify a sample → UNPAUSE. While paused no one can mint over a legacy token's
 // field (the upgrade drops the calendar-year check before the claims are synced).
@@ -12,7 +12,7 @@
 // live contract already has). The script lists active tokens still without one and
 // refuses to run while any remain, unless ALLOW_HELD=1.
 //
-// Run (Ledger owner): npx hardhat run scripts/TOMAINNET/do_upgrade_foodtoken_p1.ts --network polygon-ledger
+// Run (Ledger owner): npx hardhat run scripts/do_upgrade_foodtoken_p1.ts --network polygon-ledger
 // Dry run (validate only, no tx): DRY_RUN=1 npx hardhat run ... --network polygon
 
 const { ethers, upgrades } = require("hardhat");
@@ -40,7 +40,7 @@ async function main() {
 
   const F = await ethers.getContractFactory("FoodTokenUpgradeable", owner);
   await upgrades.validateUpgrade(FOODTOKEN_PROXY, F, { kind: "uups" });
-  console.log("validateUpgrade ✅ (two mappings appended)");
+  console.log("validateUpgrade ✅ (one mapping appended)");
 
   // 0. Tokens that would hold their fields until reported (no harvest date yet).
   const all = await ft.queryFilter(ft.filters.TokenMinted(), 0, "latest");

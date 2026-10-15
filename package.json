@@ -1,0 +1,25 @@
+{
+  "name": "nila-evm",
+  "version": "1.0.0",
+  "description": "Nila on Polygon: FoodToken, land title and the 1155 fund module",
+  "main": "hardhat.config.js",
+  "scripts": {
+    "test": "hardhat test"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ledger": "^1.2.2",
+    "@nomicfoundation/hardhat-toolbox": "^6.1.0",
+    "@openzeppelin/contracts": "^5.4.0",
+    "@openzeppelin/contracts-upgradeable": "^5.4.0",
+    "@openzeppelin/hardhat-upgrades": "*",
+    "dotenv": "^16.4.7",
+    "ethers": "^6.15.0",
+    "hardhat": "^2.26.0",
+    "hardhat-contract-sizer": "^2.10.1",
+    "hardhat-gas-reporter": "^2.3.0"
+  },
+  "dependencies": {
+    "crypto-js": "^4.2.0",
+    "i": "^0.3.7"
+  }
+}

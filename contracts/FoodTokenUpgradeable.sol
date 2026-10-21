@@ -133,10 +133,17 @@ contract FoodTokenUpgradeable is
     // title => field bit (0 = entire property, 1–127 = zones) => busy until (unix ts)
     mapping(uint32 => mapping(uint8 => uint32)) public fieldBusyUntil;
 
+    // ── leader mints (P2, 21 Oct 2026; appended — storage layout) ──
+    // The unions whose leaders may mint a member's crop share into a standing batch (union_ = 0, one per crop,
+    // made by setCropType). A batch of a union's own (union_ != 0) needs no entry: its leaders may always mint.
+    mapping(address => bool) public leaderMintUnions;
+
     // ================================================================
     //  EVENTS
     // ================================================================
 
+    event LeaderMintUnionSet(address indexed union_, bool on);
+    event CropShareMintedByLeader(uint256 indexed tokenId, address indexed union_, address indexed leader, address farmer);
     event BatchCreated(uint256 indexed batchId, address indexed union_, uint16 indexed cropCode, uint16 varietyCode, address buyer);
     event BatchArchived(uint256 indexed batchId);
     event BatchStatusUpdated(uint256 indexed batchId, uint8 status);
@@ -181,6 +188,7 @@ contract FoodTokenUpgradeable is
     error SosTooFar();
     error NotStanding();
     error TokenNotInBatch();
+    error NotLeaderOfBatch();
 
     // ================================================================
     //  MODIFIERS
@@ -371,22 +379,26 @@ contract FoodTokenUpgradeable is
     // ================================================================
 
     function joinBatch(uint256 batchId) external whenNotPaused {
+        _join(batchId, msg.sender);
+    }
+
+    function _join(uint256 batchId, address farmer) internal {
         Batch storage b = batches[batchId];
         if (!b.active || b.status >= 1) revert BatchNotActive();
-        BatchMember storage m = batchMembers[batchId][msg.sender];
+        BatchMember storage m = batchMembers[batchId][farmer];
         if (m.status != MemberStatus.None) revert AlreadyMember();
 
         uint8 held; bool ok;
         if (address(certRegistry) != address(0) && b.requiredCerts > 0) {
             uint8 missing;
-            (held, missing, ok) = certRegistry.checkCerts(msg.sender, b.requiredCerts);
+            (held, missing, ok) = certRegistry.checkCerts(farmer, b.requiredCerts);
         } else {
             ok = true;
         }
 
         m.certsAtJoin = held; m.certsNow = held;
         m.status = ok ? MemberStatus.Certified : MemberStatus.Joined;
-        emit MemberJoined(batchId, msg.sender, held, ok);
+        emit MemberJoined(batchId, farmer, held, ok);
     }
 
     function refreshCertStatus(uint256 batchId, address farmer) external {
@@ -439,17 +451,64 @@ contract FoodTokenUpgradeable is
         uint16  farmerVarietyCode,
         uint32  sosDate
     ) external whenNotPaused {
+        if (address(landTitleContract) == address(0)) revert ZeroAddress();
+        _mintFor(msg.sender, batchId, landTitleId, harvestDate, quantity, fieldsBitmask, areaM2, farmerVarietyCode, sosDate);
+    }
+
+    /// @notice P2 (executive decision 21 Oct 2026): a leader of her union mints her crop share when approving her
+    ///         crop plan. The token goes to the land title's holder (her wallet), never to the caller; she is joined
+    ///         to the batch on the way if she is not a member yet (same cert check as joinBatch). Every other check
+    ///         of mintForBatchMember applies unchanged. The batch is the union's own (union_ == union) or a standing
+    ///         batch (union_ == 0) of a union the owner enabled with setLeaderMintUnion.
+    function mintForBatchMemberByLeader(
+        address union,
+        uint256 batchId,
+        uint32  landTitleId,
+        uint32  harvestDate,
+        uint256 quantity,
+        uint128 fieldsBitmask,
+        uint32  areaM2,
+        uint16  farmerVarietyCode,
+        uint32  sosDate
+    ) external whenNotPaused {
+        if (address(landTitleContract) == address(0)) revert ZeroAddress();
+        address bu = batches[batchId].union_;
+        if (union == address(0) || !(bu == union || (bu == address(0) && leaderMintUnions[union]))) revert NotLeaderOfBatch();
+        if (!_isUnionAuth(union)) revert NotAuthorized();
+        address farmer = landTitleContract.ownerOf(landTitleId);
+        if (batchMembers[batchId][farmer].status == MemberStatus.None) _join(batchId, farmer);
+        uint256 tokenId = _mintFor(farmer, batchId, landTitleId, harvestDate, quantity, fieldsBitmask, areaM2, farmerVarietyCode, sosDate);
+        emit CropShareMintedByLeader(tokenId, union, msg.sender, farmer);
+    }
+
+    /// @notice Owner: let this union's leaders mint into the standing (union-less) batches.
+    function setLeaderMintUnion(address union, bool on) external onlyOwner {
+        if (union == address(0)) revert ZeroAddress();
+        leaderMintUnions[union] = on;
+        emit LeaderMintUnionSet(union, on);
+    }
+
+    function _mintFor(
+        address farmer,
+        uint256 batchId,
+        uint32  landTitleId,
+        uint32  harvestDate,
+        uint256 quantity,
+        uint128 fieldsBitmask,
+        uint32  areaM2,
+        uint16  farmerVarietyCode,
+        uint32  sosDate
+    ) internal returns (uint256 tokenId) {
         if (fieldsBitmask == 0) revert FieldsRequired();
         // Bit 0 ("entire property") is exclusive — can't be combined with specific fields
         if ((fieldsBitmask & 1) != 0 && fieldsBitmask != 1) revert MixedEntireAndSpecific();
         if (sosDate == 0) revert InvalidSosDate();
         if (sosDate > uint32(block.timestamp) + MAX_SOS_AHEAD) revert SosTooFar();
 
-        BatchMember storage m = batchMembers[batchId][msg.sender];
+        BatchMember storage m = batchMembers[batchId][farmer];
         if (m.status != MemberStatus.Certified) revert NotCertified();
 
-        if (address(landTitleContract) == address(0)) revert ZeroAddress();
-        if (landTitleContract.ownerOf(landTitleId) != msg.sender) revert NotLandOwner();
+        if (landTitleContract.ownerOf(landTitleId) != farmer) revert NotLandOwner();
         if (landTitleContract.getCommitment(landTitleId) == bytes32(0)) revert NoOracleRecord();
 
         Batch storage b = batches[batchId];
@@ -476,9 +535,9 @@ contract FoodTokenUpgradeable is
         // Combined 6-digit crop codex: cropFamily*1000 + variety. SOS is packed into the
         // tokenId itself (no separate mapping); the id is fully self-describing.
         uint32 combinedCrop = uint32(b.cropCode) * 1000 + uint32(farmerVarietyCode);
-        uint256 tokenId = packTokenId(landTitleId, combinedCrop, sosDate, areaM2, fieldsBitmask);
+        tokenId = packTokenId(landTitleId, combinedCrop, sosDate, areaM2, fieldsBitmask);
 
-        _mint(msg.sender, tokenId, quantity, "");
+        _mint(farmer, tokenId, quantity, "");
 
         // One SSTORE for all mutable per-token state: status=1, eos=harvestDate, batchId
         _tokenMeta[tokenId] =
@@ -496,7 +555,7 @@ contract FoodTokenUpgradeable is
             emit BatchStatusUpdated(batchId, 1);
         }
 
-        emit TokenMinted(tokenId, msg.sender, batchId, sosDate, quantity);
+        emit TokenMinted(tokenId, farmer, batchId, sosDate, quantity);
     }
 
     // ================================================================

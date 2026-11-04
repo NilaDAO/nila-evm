@@ -70,6 +70,10 @@ contract NilaLandTitle is
     event ViewFeesClaimed(address indexed owner, uint256 amount);
     event ViewerDiscountChanged(address indexed viewer, bool discounted);
     event ViewFeeChanged(uint256 oldFee, uint256 newFee);
+    event TitleRevoked(uint256 indexed tokenId, address indexed from, address indexed by);
+
+    /// @dev Burn address for revoked titles (constant: no storage slot).
+    address public constant BURN_ADDRESS = 0x000000000000000000000000000000000000dEaD;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -148,6 +152,22 @@ contract NilaLandTitle is
         _titleNames[tokenId] = newTitleName;
 
         emit TitleNameUpdated(tokenId, oldTitleName, newTitleName);
+    }
+
+    // ----------------- Revoke (4 Nov 2026) -----------------
+
+    /// @notice Move a title from its holder to the burn address 0x…dEaD, without her
+    ///         approval: a union leader removes a member (who may be absent) or a member
+    ///         burns her own title through the node. Only a whitelisted signer (the
+    ///         node's title key) or the owner may call. The node then attests on Stellar.
+    ///         The holder can still transfer to 0x…dEaD herself.
+    function revokeTitle(uint256 tokenId) external {
+        require(_whitelist[msg.sender] || msg.sender == owner(), "not authorized");
+        address from = _ownerOf(tokenId);
+        require(from != address(0), "token does not exist");
+        require(from != BURN_ADDRESS, "already revoked");
+        _transfer(from, BURN_ADDRESS, tokenId); // _update with auth = 0: no approval check
+        emit TitleRevoked(tokenId, from, msg.sender);
     }
 
     // ─────────── CS023: Gated property data ────────────

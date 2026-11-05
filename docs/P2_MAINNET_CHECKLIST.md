@@ -16,8 +16,19 @@ to her wallet (the land title's holder). FoodTokens stay on Polygon; the atteste
 
 ## Steps
 1. `npx hardhat test` (16 passing at `t1/contracts/P2-leader-mint`), and an external review of the diff.
-2. Dry run: `DRY_RUN=1 npx hardhat run scripts/do_upgrade_foodtoken_p2.ts --network polygon` — validateUpgrade only.
-3. Executive go, then with the Ledger: `LEADER_MINT_UNION=<today's union> npx hardhat run scripts/do_upgrade_foodtoken_p2.ts --network polygon-ledger`.
+2. Dry run (reads only, no signer; 5 Nov: passes against mainnet block 96792226): `DRY_RUN=1 npx hardhat run scripts/do_upgrade_foodtoken_p2.js --network polygon` — validateUpgrade only.
+3. Executive go, then with the Ledger: `LEADER_MINT_UNION=0xF18E4966731bD6D3a56c1eb23Da7C708c9C48070 npx hardhat run scripts/do_upgrade_foodtoken_p2.js --network polygon-ledger`.
+3a. Crop families (5 Nov): mainnet has none registered (`cropName` empty for every code), and the Stellar crop calendar
+   (nila-soroban checklist C16) and every leader mint need them. Dry run `DRY_RUN=1 npx hardhat run
+   scripts/register_crop_types.js --network polygon`, then with the Ledger (one prompt per family, 15):
+   `npx hardhat run scripts/register_crop_types.js --network polygon-ledger`. Each family gets its standing batch.
 4. Check: `leaderMintUnions(<union>) == true`; impl slot changed; a leader's mint on a test title (or the first real
    approval) lands in the member's wallet and the attester's F2 follower attests it on Stellar.
 5. Ship together: nila-sensing (mint list / gas for the approving leader) and nila-pwa (L12 mints, CP12 waits).
+
+## Notes (5 Nov)
+- The live implementation `0x5C865c04…66d8` (P1, deployed from nila-contracts) is now in this repo's
+  `.openzeppelin/polygon.json`; without it `validateUpgrade` refuses ("not registered").
+- The upgrade scripts are plain `.js`: the `.ts` versions did not compile here (TS5109, no tsconfig).
+- Ledger: the Ethereum app needs blind signing on (contract data). Prompts: implementation deploy, `upgradeToAndCall`,
+  `setLeaderMintUnion`, then 15 × `setCropType`.

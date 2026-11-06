@@ -21678,6 +21678,500 @@
           ]
         }
       }
+    },
+    "4219d578d9bc967c0611928e9e27a56b2fe06f327fa81042e15127dd358cbf1c": {
+      "address": "0x5C865c041210645F8d391B39b516a6df2E9966d8",
+      "txHash": "0x00b626b3d8024137a872cee341fd8cd6fced26e61c5e9ee2dc94db6eabd4889b",
+      "layout": {
+        "solcVersion": "0.8.25",
+        "storage": [
+          {
+            "label": "batches",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_mapping(t_uint256,t_struct(Batch)7949_storage)",
+            "contract": "FoodTokenUpgradeable",
+            "src": "contracts/FoodTokenUpgradeable.sol:104"
+          },
+          {
+            "label": "nextBatchId",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256",
+            "contract": "FoodTokenUpgradeable",
+            "src": "contracts/FoodTokenUpgradeable.sol:105"
+          },
+          {
+            "label": "canonicalBatch",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_mapping(t_uint16,t_uint256)",
+            "contract": "FoodTokenUpgradeable",
+            "src": "contracts/FoodTokenUpgradeable.sol:106"
+          },
+          {
+            "label": "cropName",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_mapping(t_uint16,t_string_storage)",
+            "contract": "FoodTokenUpgradeable",
+            "src": "contracts/FoodTokenUpgradeable.sol:107"
+          },
+          {
+            "label": "varieties",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_uint16,t_array(t_string_storage)dyn_storage)",
+            "contract": "FoodTokenUpgradeable",
+            "src": "contracts/FoodTokenUpgradeable.sol:108"
+          },
+          {
+            "label": "oracleSigners",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_address,t_bool)",
+            "contract": "FoodTokenUpgradeable",
+            "src": "contracts/FoodTokenUpgradeable.sol:110"
+          },
+          {
+            "label": "rolesRegistry",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_contract(IRolesRegistry)11144",
+            "contract": "FoodTokenUpgradeable",
+            "src": "contracts/FoodTokenUpgradeable.sol:112"
+          },
+          {
+            "label": "certRegistry",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_contract(NilaCertRegistry)11062",
+            "contract": "FoodTokenUpgradeable",
+            "src": "contracts/FoodTokenUpgradeable.sol:112"
+          },
+          {
+            "label": "landTitleContract",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_contract(INilaLandTitle)7892",
+            "contract": "FoodTokenUpgradeable",
+            "src": "contracts/FoodTokenUpgradeable.sol:113"
+          },
+          {
+            "label": "collateralBps",
+            "offset": 20,
+            "slot": "8",
+            "type": "t_uint16",
+            "contract": "FoodTokenUpgradeable",
+            "src": "contracts/FoodTokenUpgradeable.sol:114"
+          },
+          {
+            "label": "batchMembers",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_mapping(t_uint256,t_mapping(t_address,t_struct(BatchMember)7961_storage))",
+            "contract": "FoodTokenUpgradeable",
+            "src": "contracts/FoodTokenUpgradeable.sol:114"
+          },
+          {
+            "label": "_tokenMeta",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "FoodTokenUpgradeable",
+            "src": "contracts/FoodTokenUpgradeable.sol:122"
+          },
+          {
+            "label": "yearFieldBitmask",
+            "offset": 0,
+            "slot": "11",
+            "type": "t_mapping(t_uint32,t_mapping(t_uint16,t_uint128))",
+            "contract": "FoodTokenUpgradeable",
+            "src": "contracts/FoodTokenUpgradeable.sol:130"
+          },
+          {
+            "label": "landTitleTokens",
+            "offset": 0,
+            "slot": "12",
+            "type": "t_mapping(t_uint32,t_array(t_uint256)dyn_storage)",
+            "contract": "FoodTokenUpgradeable",
+            "src": "contracts/FoodTokenUpgradeable.sol:134"
+          },
+          {
+            "label": "fieldBusyUntil",
+            "offset": 0,
+            "slot": "13",
+            "type": "t_mapping(t_uint32,t_mapping(t_uint8,t_uint32))",
+            "contract": "FoodTokenUpgradeable",
+            "src": "contracts/FoodTokenUpgradeable.sol:143"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_bool))": {
+            "label": "mapping(address => mapping(address => bool))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_mapping(t_address,t_uint256))": {
+            "label": "mapping(uint256 => mapping(address => uint256))",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(ERC1155Storage)234_storage": {
+            "label": "struct ERC1155Upgradeable.ERC1155Storage",
+            "members": [
+              {
+                "label": "_balances",
+                "type": "t_mapping(t_uint256,t_mapping(t_address,t_uint256))",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_operatorApprovals",
+                "type": "t_mapping(t_address,t_mapping(t_address,t_bool))",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "_uri",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "2"
+              }
+            ],
+            "numberOfBytes": "96"
+          },
+          "t_struct(InitializableStorage)73_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)13_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(PausableStorage)507_storage": {
+            "label": "struct PausableUpgradeable.PausableStorage",
+            "members": [
+              {
+                "label": "_paused",
+                "type": "t_bool",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_array(t_string_storage)dyn_storage": {
+            "label": "string[]",
+            "numberOfBytes": "32"
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]",
+            "numberOfBytes": "32"
+          },
+          "t_contract(INilaLandTitle)7892": {
+            "label": "contract INilaLandTitle",
+            "numberOfBytes": "20"
+          },
+          "t_contract(IRolesRegistry)11144": {
+            "label": "contract IRolesRegistry",
+            "numberOfBytes": "20"
+          },
+          "t_contract(NilaCertRegistry)11062": {
+            "label": "contract NilaCertRegistry",
+            "numberOfBytes": "20"
+          },
+          "t_enum(MemberStatus)7953": {
+            "label": "enum FoodTokenUpgradeable.MemberStatus",
+            "members": [
+              "None",
+              "Joined",
+              "Certified"
+            ],
+            "numberOfBytes": "1"
+          },
+          "t_mapping(t_address,t_struct(BatchMember)7961_storage)": {
+            "label": "mapping(address => struct FoodTokenUpgradeable.BatchMember)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint16,t_array(t_string_storage)dyn_storage)": {
+            "label": "mapping(uint16 => string[])",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint16,t_string_storage)": {
+            "label": "mapping(uint16 => string)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint16,t_uint128)": {
+            "label": "mapping(uint16 => uint128)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint16,t_uint256)": {
+            "label": "mapping(uint16 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_mapping(t_address,t_struct(BatchMember)7961_storage))": {
+            "label": "mapping(uint256 => mapping(address => struct FoodTokenUpgradeable.BatchMember))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(Batch)7949_storage)": {
+            "label": "mapping(uint256 => struct FoodTokenUpgradeable.Batch)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint32,t_array(t_uint256)dyn_storage)": {
+            "label": "mapping(uint32 => uint256[])",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint32,t_mapping(t_uint16,t_uint128))": {
+            "label": "mapping(uint32 => mapping(uint16 => uint128))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint32,t_mapping(t_uint8,t_uint32))": {
+            "label": "mapping(uint32 => mapping(uint8 => uint32))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint8,t_uint32)": {
+            "label": "mapping(uint8 => uint32)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(Batch)7949_storage": {
+            "label": "struct FoodTokenUpgradeable.Batch",
+            "members": [
+              {
+                "label": "union_",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "cropCode",
+                "type": "t_uint16",
+                "offset": 20,
+                "slot": "0"
+              },
+              {
+                "label": "varietyCode",
+                "type": "t_uint16",
+                "offset": 22,
+                "slot": "0"
+              },
+              {
+                "label": "active",
+                "type": "t_bool",
+                "offset": 24,
+                "slot": "0"
+              },
+              {
+                "label": "conditions",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "buyer",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "targetQtyKg",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "3"
+              },
+              {
+                "label": "claimedQtyKg",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "4"
+              },
+              {
+                "label": "deliveryDate",
+                "type": "t_uint32",
+                "offset": 0,
+                "slot": "5"
+              },
+              {
+                "label": "pricePerKgUsdt",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "6"
+              },
+              {
+                "label": "status",
+                "type": "t_uint8",
+                "offset": 0,
+                "slot": "7"
+              },
+              {
+                "label": "requiredCerts",
+                "type": "t_uint8",
+                "offset": 1,
+                "slot": "7"
+              }
+            ],
+            "numberOfBytes": "256"
+          },
+          "t_struct(BatchMember)7961_storage": {
+            "label": "struct FoodTokenUpgradeable.BatchMember",
+            "members": [
+              {
+                "label": "status",
+                "type": "t_enum(MemberStatus)7953",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "certsAtJoin",
+                "type": "t_uint8",
+                "offset": 1,
+                "slot": "0"
+              },
+              {
+                "label": "certsNow",
+                "type": "t_uint8",
+                "offset": 2,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint128": {
+            "label": "uint128",
+            "numberOfBytes": "16"
+          },
+          "t_uint16": {
+            "label": "uint16",
+            "numberOfBytes": "2"
+          },
+          "t_uint32": {
+            "label": "uint32",
+            "numberOfBytes": "4"
+          },
+          "t_uint8": {
+            "label": "uint8",
+            "numberOfBytes": "1"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Pausable": [
+            {
+              "contract": "PausableUpgradeable",
+              "label": "_paused",
+              "type": "t_bool",
+              "src": "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol:21",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.ERC1155": [
+            {
+              "contract": "ERC1155Upgradeable",
+              "label": "_balances",
+              "type": "t_mapping(t_uint256,t_mapping(t_address,t_uint256))",
+              "src": "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol:27",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "ERC1155Upgradeable",
+              "label": "_operatorApprovals",
+              "type": "t_mapping(t_address,t_mapping(t_address,t_bool))",
+              "src": "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol:29",
+              "offset": 0,
+              "slot": "1"
+            },
+            {
+              "contract": "ERC1155Upgradeable",
+              "label": "_uri",
+              "type": "t_string_storage",
+              "src": "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol:32",
+              "offset": 0,
+              "slot": "2"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
     }
   }
 }
